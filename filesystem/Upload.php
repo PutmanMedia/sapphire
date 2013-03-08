@@ -170,6 +170,9 @@ class Upload extends Controller {
 					user_error("Couldn't fix $relativeFilePath with $i tries", E_USER_ERROR);
 				}
 			}	
+		} else {
+			//reset the ownerID to the current member when replacing files
+			$this->file->OwnerID = (Member::currentUser() ? Member::currentUser()->ID : 0);
 		}
 
 		if(file_exists($tmpFile['tmp_name']) && copy($tmpFile['tmp_name'], "$base/$relativeFilePath")) {
@@ -177,6 +180,7 @@ class Upload extends Controller {
 			// This is to prevent it from trying to rename the file
 			$this->file->Name = basename($relativeFilePath);
 			$this->file->write();
+			$this->extend('onAfterLoad', $this->file);   //to allow extensions to e.g. create a version after an upload
 			return true;
 		} else {
 			$this->errors[] = _t('File.NOFILESIZE', 'Filesize is zero bytes.');

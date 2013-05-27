@@ -199,6 +199,8 @@ class FormField extends RequestHandler {
 	/**
 	 * Method to save this form field into the given data object.
 	 * By default, makes use of $this->dataValue()
+	 * 
+	 * @param DataObjectInterface $record DataObject to save data into
 	 */
 	public function saveInto(DataObjectInterface $record) {
 		if($this->name) {
@@ -419,7 +421,9 @@ class FormField extends RequestHandler {
 	
 	/**
 	 * Set the field value.
-	 * Returns $this.
+	 * 
+	 * @param mixed $value
+	 * @return FormField Self reference
 	 */
 	public function setValue($value) {
 		$this->value = $value;
